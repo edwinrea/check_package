@@ -1,10 +1,15 @@
-import sys,argparse,zipfile,uuid,shutil
+#Created on 26 Dic. 2016
+#@author: epena
 
-folderName = str(uuid.uuid4())
+import sys,argparse,zipfile,shutil,string,random,os
+
+#Funciones
+
+def generator_id(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+folderName = generator_id()
 workDir = '/tmp/' + folderName
-
-print (workDir)
-
 
 parser = argparse.ArgumentParser(description="Validador de paquetes")
 parser.add_argument('-p', '--package', nargs='?', help='Paquete a validar', required=True)
@@ -16,4 +21,11 @@ zf = zipfile.ZipFile(package_param, 'r')
 zf.extractall(workDir) #Extraigo el contenido del zip en /tmp/e/
 zf.close()
 
-shutil.rmtree(workDir) #Borro carpeta temporall
+packageName = os.path.splitext(package_param)[0]
+a = workDir + '/' + packageName
+descompressedPackage = os.path.isdir(a)
+
+print workDir
+print packageName
+
+shutil.rmtree(workDir) #Borro carpeta temporal
