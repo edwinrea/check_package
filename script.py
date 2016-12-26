@@ -26,6 +26,6 @@ a = workDir + '/' + packageName
 descompressedPackage = os.path.isdir(a)
 
 print workDir
-print packageName
+print descompressedPackage
 
-shutil.rmtree(workDir) #Borro carpeta temporal
+#shutil.rmtree(workDir) #Borro carpeta temporal
