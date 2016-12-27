@@ -17,15 +17,26 @@ args = parser.parse_args()
 
 package_param = args.package #Obtengo el nombre del parametro
 
-zf = zipfile.ZipFile(package_param, 'r')
-zf.extractall(workDir) #Extraigo el contenido del zip en /tmp/e/
-zf.close()
+for filename in sys.argv[2:]: #Verifico el nombre de la carpeta del Zip
+    z = zipfile.ZipFile(file(filename))
 
-packageName = os.path.splitext(package_param)[0]
-a = workDir + '/' + packageName
-descompressedPackage = os.path.isdir(a)
+if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:
+    print "Zip package name:  %s:" % (filename)
+    print "Folder name in Zip package:  %s: " % z.namelist()[0]
+    sys.exit("El nombre del paquete no coincide con el nombre de la carpeta")
 
-print workDir
-print descompressedPackage
+
+
+
+#zf = zipfile.ZipFile(package_param, 'r')
+#zf.extractall(workDir) #Extraigo el contenido del zip en /tmp/e/
+#zf.close()
+
+#packageName = os.path.splitext(package_param)[0]
+#a = workDir + '/' + packageName
+#descompressedPackage = os.path.isdir(a)
+
+#print workDir
+#print descompressedPackage
 
 #shutil.rmtree(workDir) #Borro carpeta temporal
