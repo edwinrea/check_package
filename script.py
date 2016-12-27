@@ -5,25 +5,32 @@ import sys,argparse,zipfile,shutil,string,random,os
 
 #Funciones
 
+#Funcion para generar id para la carpeta temporal
 def generator_id(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
+#Creacion de la carpeta temporal
 folderName = generator_id()
 workDir = '/tmp/' + folderName
 
+#Se parsea los argumentos
 parser = argparse.ArgumentParser(description="Validador de paquetes")
 parser.add_argument('-p', '--package', nargs='?', help='Paquete a validar', required=True)
 args = parser.parse_args()
 
-package_param = args.package #Obtengo el nombre del parametro
+#Obtengo el nombre del paquete
+package_param = args.package
 
-for filename in sys.argv[2:]: #Verifico el nombre de la carpeta del Zip
+#Verifico el nombre de la carpeta del Zip
+for filename in sys.argv[2:]:
     z = zipfile.ZipFile(file(filename))
 
-if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:  #Verifico que el nombre del paquete sea el mismo
-    print "Zip package name:  %s:" % (filename)                     #nombre de la carpeta interna
-    print "Folder name in Zip package:  %s: " % z.namelist()[0]
-    sys.exit("El nombre del paquete no coincide con el nombre de la carpeta")
+#Verifico que el nombre del paquete sea el mismo nombre de la carpeta interna
+if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:
+    print "Nombre del Zip:  %s:" % (filename)
+    print "Nombre de la carpeta dentro del Zip:  %s: " % z.namelist()[0]
+    print "El nombre del paquete no coincide con el nombre de la carpeta"
+    sys.exit(1)
 
 
 
