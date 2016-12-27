@@ -20,8 +20,8 @@ package_param = args.package #Obtengo el nombre del parametro
 for filename in sys.argv[2:]: #Verifico el nombre de la carpeta del Zip
     z = zipfile.ZipFile(file(filename))
 
-if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:
-    print "Zip package name:  %s:" % (filename)
+if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:  #Verifico que el nombre del paquete sea el mismo
+    print "Zip package name:  %s:" % (filename)                     #nombre de la carpeta interna
     print "Folder name in Zip package:  %s: " % z.namelist()[0]
     sys.exit("El nombre del paquete no coincide con el nombre de la carpeta")
 
