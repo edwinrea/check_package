@@ -15,14 +15,11 @@ def natural_sort(l):
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
     return sorted(l, key = alphanum_key)
 
-def remove_values_from_list(the_list, val):
-   return [value for value in the_list if value != val]
+
 
 
 #Lista con pablabras a eliminar
 black_list = ['master']
-
-print str(black_list)
 
 #Creacion de la carpeta temporal
 folderName = generator_id()
@@ -57,28 +54,21 @@ if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:
 #Asignacion de la ruta donde se encuentra el modulo descomprimido
 module_path = workDir+"/"+z.namelist()[0]+"docs/"
 
-#for a in os.listdir(module_path):
-#   print a
-
-#for root, dirnames, filenames in os.walk(module_path):
-#    print root
-
 os.chdir(module_path)
 print os.getcwd()
 
+versiones = os.listdir(os.getcwd())
 
-dir_list = os.walk(module_path).next()[1]
+
+#dir_list = os.walk(module_path).next()[1]
 #dir_list = [f for f in dir_list if "master" not in f]
-dir_list = remove_values_from_list(dir_list,black_list)
-#print  masterless_versiones
 
-#if any("master" in s for s in dir_list):
-#    print "edwin"
+#print dir_list
 
-thefile = open('versiones.txt', 'w')
+#thefile = open('versiones.txt', 'w')
 
-for item in natural_sort(dir_list):
-    print>>thefile, item
+#for item in natural_sort(dir_list):
+#    print>>thefile, item
 
 
-#shutil.rmtree(workDir) #Borro carpeta temporal
+shutil.rmtree(workDir) #Borro carpeta temporal
