@@ -80,9 +80,15 @@ for dir in docs_folder:
             versiones.append(dir)
         else:
             continue
-        #print dir
+        print dir
         for file in os.listdir(dir):
-            if is_allowed_file(file):
+            if not is_allowed_file(file):
+                if file.endswith('.sql'):
+                    if not is_allowed_file(file):
+                        print "ERROR" + file
+                elif file.endswith('.txt'):
+                    if not is_allowed_file(file):
+                        print "***********************ERROR " + file
                 continue
             else:
                 print file

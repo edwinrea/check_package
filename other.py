@@ -1,16 +1,4 @@
-import zipfile,sys
-
-for filename in sys.argv[1:]:
-        z = zipfile.ZipFile(file(filename))
-        print "%s:" % (filename)
-        print z.namelist()[0]
-        for f in z.namelist():
-                print "\t%s" % (f)
-        print ""
-
-
-
-exception_list={"master","peteco"}
+#exception_list={"master","peteco"}
 
 
 #def is_excepcion(carpeta):
@@ -22,5 +10,38 @@ exception_list={"master","peteco"}
                 #escribo en versiones.txt
                 #check_script_files(carpeta)
         #sino no hago nada
+
+exeptionFolder = ['folder2']
+WhiteFiles = ['central.sql','server.sql','caja.sql']
+
+rray=['local','central','server.sql','folder1']
+
+
+def is_exception_folder(folder):
+    return folder in exeptionFolder
+
+
+mypath='/tmp/python/'
+
+import os
+
+for dirname,dirnames, filenames in os.walk(mypath):
+    # print path to all subdirectories first.
+         for subdirname in dirnames:
+            if not is_exception_folder(subdirname):
+                print subdirname
+                for file in os.walk(subdirname):
+                        print file
+
+
+    #for filename in filenames:
+            #if '11' in filenames:
+             #       filenames.remove('11')
+    #                print(os.path.join(dirname, filename))
+
+    # Advanced usage:
+    # editing the 'dirnames' list will stop os.walk() from recursing into there.
+
+
 
 
