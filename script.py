@@ -24,6 +24,10 @@ def is_exception_folder(folder):
 def is_allowed_file(file):
     return file in allowed_files
 
+def deleteContent(pfile):
+    pfile.seek(0)
+    pfile.truncate()
+
 
 #Lista con pablabras a eliminar
 black_list = ['master','VersionGEOPosServer.xml']
@@ -66,14 +70,15 @@ docs_folder=os.listdir(docs)
 
 os.chdir(docs)
 
-thefile = open('versiones.txt', 'w')
+thefile = open('versiones.txt', 'w+')
+deleteContent(thefile)
 
+versiones = []
 for dir in docs_folder:
-
     if not is_exception_folder(dir):
         if os.path.isdir(dir):
-            #print "Carpeta %s: " %dir
-            print>> thefile,dir
+            versiones.append(dir)
+            #print>> thefile,dir
         else:
             continue
         #print dir
@@ -83,7 +88,9 @@ for dir in docs_folder:
             else:
                 print "Archivo %s: " % file
 
-
+for item in natural_sort(versiones):
+    print >> thefile,item
+#print "\n".join(versiones)
 
 # for root, dirs in os.walk(os.getcwd(), topdown=True):
 #     dirs[:] = [d for d in dirs if d not in black_list]
