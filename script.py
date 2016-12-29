@@ -90,26 +90,6 @@ for dir in docs_folder:
 
 for item in natural_sort(versiones):
     print >> thefile,item
-#print "\n".join(versiones)
-
-# for root, dirs in os.walk(os.getcwd(), topdown=True):
-#     dirs[:] = [d for d in dirs if d not in black_list]
-#     versiones = [dirs]
-#
-#     for item in natural_sort(versiones):
-#         print>> thefile, item
-    #print versiones
-
-
-#dir_list = os.walk(module_path).next()[1]
-#dir_list = [f for f in dir_list if "master" not in f]
-
-#print dir_list
-
-#thefile = open('versiones.txt', 'w')
-
-#for item in natural_sort(dir_list):
-#    print>>thefile, item
 
 
 #shutil.rmtree(workDir) #Borro carpeta temporal
