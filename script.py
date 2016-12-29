@@ -85,11 +85,13 @@ for dir in docs_folder:
             if is_allowed_file(file):
                 continue
             else:
-                print "Archivo %s: " % file
+                print file
 
 #Armo el versiones.txt ordenadamente
 for item in natural_sort(versiones):
     print >> the_file,item
 
+the_file.close()
 
-shutil.rmtree(work_dir) #Borro carpeta temporal
+#Borro carpeta temporal
+shutil.rmtree(work_dir)
