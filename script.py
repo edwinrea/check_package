@@ -3,6 +3,9 @@
 
 import sys,argparse,zipfile,shutil,string,random,os,re
 
+exeptionFolder = ['master']
+allowed_files = ['central.sql','caja.sql','server.sql','caja-propiedades.txt','server-propiedades.txt']
+
 #Funciones
 
 #Funcion para generar id para la carpeta temporal
@@ -15,11 +18,15 @@ def natural_sort(l):
     alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
     return sorted(l, key = alphanum_key)
 
+def is_exception_folder(folder):
+    return folder in exeptionFolder
 
+def is_allowed_file(file):
+    return file in allowed_files
 
 
 #Lista con pablabras a eliminar
-black_list = ['master']
+black_list = ['master','VersionGEOPosServer.xml']
 
 #Creacion de la carpeta temporal
 folderName = generator_id()
@@ -52,12 +59,39 @@ if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:
     sys.exit(1)
 
 #Asignacion de la ruta donde se encuentra el modulo descomprimido
-module_path = workDir+"/"+z.namelist()[0]+"docs/"
+module_path = workDir+"/"+z.namelist()[0]
+docs = module_path + "docs/"
 
-os.chdir(module_path)
-print os.getcwd()
+docs_folder=os.listdir(docs)
 
-versiones = os.listdir(os.getcwd())
+os.chdir(docs)
+
+thefile = open('versiones.txt', 'w')
+
+for dir in docs_folder:
+
+    if not is_exception_folder(dir):
+        if os.path.isdir(dir):
+            #print "Carpeta %s: " %dir
+            print>> thefile,dir
+        else:
+            continue
+        #print dir
+        for file in os.listdir(dir):
+            if is_allowed_file(file):
+                continue
+            else:
+                print "Archivo %s: " % file
+
+
+
+# for root, dirs in os.walk(os.getcwd(), topdown=True):
+#     dirs[:] = [d for d in dirs if d not in black_list]
+#     versiones = [dirs]
+#
+#     for item in natural_sort(versiones):
+#         print>> thefile, item
+    #print versiones
 
 
 #dir_list = os.walk(module_path).next()[1]
@@ -71,4 +105,4 @@ versiones = os.listdir(os.getcwd())
 #    print>>thefile, item
 
 
-shutil.rmtree(workDir) #Borro carpeta temporal
+#shutil.rmtree(workDir) #Borro carpeta temporal
