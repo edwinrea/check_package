@@ -48,9 +48,7 @@ def find(pattern, path):
                result.append(os.path.join(root, name))
     return result
 
-
-#Lista con pablabras a eliminar
-black_list = ['master','VersionGEOPosServer.xml']
+execution_folder = os.path.abspath(os.path.dirname(__file__))
 
 #Creacion de la carpeta temporal
 folder_name = unicode(datetime.datetime.now())
@@ -76,17 +74,25 @@ zf = zipfile.ZipFile(package_param, 'r')
 zf.extractall(work_dir)
 zf.close()
 
+#Renombro el zip
+package_param_old = package_param + '_old'
+
+os.rename(package_param,package_param_old)
+
+module_name = z.namelist()[0]
+
 #Verifico que el nombre del paquete sea el mismo nombre de la carpeta interna
 if not z.namelist()[0][:-1] == os.path.splitext(package_param)[0]:
-    print "Nombre del Zip:  %s:" % (filename)
-    print "Nombre de la carpeta dentro del Zip:  %s: " % z.namelist()[0]
+    print "Nombre del Zip:  %s:" % package_param
+    print "Nombre de la carpeta dentro del Zip:  %s: " % module_name
     print "El nombre del paquete no coincide con el nombre de la carpeta"
     #Borro carpeta temporal
     shutil.rmtree(work_dir)
     sys.exit(1)
 
 #Asignacion de la ruta donde se encuentra el modulo descomprimido
-module_path = work_dir+"/"+z.namelist()[0]
+
+module_path = work_dir+"/"+module_name
 
 docs = module_path + "docs/"
 
@@ -95,32 +101,24 @@ docs_folder=os.listdir(docs)
 #Me cambio al directorio Docs
 os.chdir(docs)
 
-the_file = open('versiones.txt', 'w+')
+
+
+the_file = open(docs + '/versiones.txt', 'w+')
 delete_content(the_file)
 
 versiones = []
 configuraciones = []
+
 for dir in docs_folder:
-    if is_allowed_configurator(dir):
-        configuraciones.append(dir)
+
     if not is_exception_folder(dir):
         if os.path.isdir(dir):
             versiones.append(dir)
-        else:
-            continue
-        for file in os.listdir(dir):
-            if not is_allowed_file(file):
-                if file.endswith('.sql'):
-                    if not is_allowed_file(file):
-                        print "ERROR: Version "+ dir +" " + file
-                elif file.endswith('.txt'):
-                    if not is_allowed_file(file):
-                        print "ERROR: Version " + dir + " " + file
-                elif file.endswith('.xml'):
-                    print "ERROR: Version " + " " + file
-                continue
-            else:
-                continue
+            for file in os.listdir(dir):
+                if not is_allowed_file(file):
+                    print "WARNING: Archivo no permitido "+ dir +" " + file
+        elif is_allowed_configurator(dir):
+            configuraciones.append(dir)
 
 #Armo el versiones.txt ordenadamente
 for item in natural_sort(versiones):
@@ -135,9 +133,9 @@ the_file.close()
 
 os.chdir(work_dir)
 
-make_zipfile(package_param,z.namelist()[0])
+make_zipfile(package_param,module_name)
 
-shutil.copy2(package_param,os.path.dirname(os.path.abspath(__file__)))
+shutil.copy2(package_param,execution_folder)
 
 #Borro carpeta temporal
 shutil.rmtree(work_dir)
